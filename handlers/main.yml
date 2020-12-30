@@ -1,0 +1,5 @@
+---
+# There is no non hacky way to deal with this
+- name: Alert logout
+  debug:
+    msg: "You must logout and login for {{ ansible_user_id }} to run docker commands after being added to docker group"
