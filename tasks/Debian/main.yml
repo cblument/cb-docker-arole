@@ -1,0 +1,31 @@
+---
+- name: Setup docker
+  block:
+    - name: Add repository key
+      apt_key:
+        id: 9DC858229FC7DD38854AE2D88D81803C0EBFCD88
+        url: https://download.docker.com/linux/debian/gpg
+
+    - name: Add repository
+      apt_repository:
+        repo: "deb [arch=amd64] https://download.docker.com/linux/debian {{ ansible_distribution_release }} stable"
+
+    - name: Install packages
+      apt:
+        name: "{{ item }}"
+        state: present
+      loop:
+        - docker-ce
+        - docker-ce-cli
+        - containerd.io
+
+    - name: Add user to docker group
+      user:
+        name: "{{ ansible_user_id }}"
+        groups:
+          - docker
+        append: yes
+      notify:
+        - Alert logout
+
+  become: yes
